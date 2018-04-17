@@ -1,6 +1,45 @@
-<DOCTYPE html>
-<html>
-<body>
-<h3> Hi </h3>
-</body>
-</html>
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset='utf-8'></meta>
+            <style type='text/css' link='css/main.css'></style>
+            <script type='text/javascript' src='js/vue.js'></script>
+            <script type='text/javascript' src='js/axios.js'></script>
+        </head>
+
+    <body>
+        <div id="app">
+        <h3> {{ message }} </h3>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+
+    var app = new Vue(
+        {
+            el: "#app",
+            data: {
+                message: "Hello world"
+            },
+            mounted: function(){
+                console.log("hello world!");
+                var that = this;
+                axios.get('api/canary')
+                    .then(function (response) {
+                        for (var i = 0; i < response.data.length; i++) {
+                            console.log(response.data[i]);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            methods: {
+                sorter: function(){
+                    console.log("sorting");
+                }
+            }
+        }
+    );
+
+    </script>
+    </html>

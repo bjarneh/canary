@@ -1,45 +1,63 @@
-﻿using System;
+﻿// Copyright (C) Bjarne Holen 2018. BSD compatible license.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebAppX.Models;
+
+/**
+ * Only "controller" in this somewhat modified MVC Hello world App.
+ *
+ * @author  bjarneholen@gmail.com
+ * @license BSD
+ * @version 1.0
+ */
 
 namespace WebAppX.Controllers
 {
     [Route("api/[controller]")]
     public class CanaryController : Controller
     {
-        // GET api/values
+        Dictionary<string, Sing> songs = new Dictionary<string,Sing>(){
+            { "id:1", new Sing("id:1") },
+            { "id:2", new Sing("id:2") },
+            { "id:3", new Sing("id:3") },
+            { "id:4", new Sing("id:4") }
+        };
+
+        public Dictionary<string, Sing> Songs { get => songs; set => songs = value; }
+
+        // GET api/canary
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Sing> Get()
         {
-            Console.WriteLine("req: {0}", Request.QueryString);
-            return new string[] { "value1", "value2" };
+            return Songs.Values;
         }
 
-        // GET api/values/5
+        // GET api/canary/5
         [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        public Sing Get(String id) => songs[id];
 
-        // POST api/values
+        // POST api/canary
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Sing song)
         {
+            songs[song.Id] = song;
         }
 
-        // PUT api/values/5
+        // PUT api/canary/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(String id, [FromBody]Sing song)
         {
+            songs[song.Id] = song;
         }
 
-        // DELETE api/values/5
+        // DELETE api/canary/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(String id)
         {
+            songs.Remove(id);
         }
     }
 }

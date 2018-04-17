@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Copyright (C) Bjarne Holen 2018. BSD compatible license.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,12 +37,28 @@ namespace WebAppX
                 app.UseDeveloperExceptionPage();
             }
 
+            // Look for index.htm[l]? or default.htm[l]?
+            app.UseDefaultFiles();
             // Use static files inside wwwroot
-            app.UseStaticFiles();
+            // app.UseStaticFiles();
+
+            // There has to be a simpler way to se encoding?
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    var contentType = ctx.Context.Response.GetTypedHeaders().ContentType;
+                    if( contentType.ToString().StartsWith("text/") ){
+                        contentType.Encoding = System.Text.Encoding.UTF8;
+                        ctx.Context.Response.Headers["Content-Type"] = contentType.ToString();
+                    }
+                }
+            });
+
             // Directory listing
             app.UseDirectoryBrowser();
 
-            // Explicit add Route and handler
+            // Example explicit Route binding and handler
             var routeBuilder = new RouteBuilder(app);
 
             routeBuilder.MapGet("hello/{name}", context =>

@@ -1,3 +1,4 @@
 WebAppX/bin/*
 WebAppX/obj/*
 .vs/*
+.vscode/*
