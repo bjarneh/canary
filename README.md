@@ -1,0 +1,2 @@
+# canary
+Report recurring events
