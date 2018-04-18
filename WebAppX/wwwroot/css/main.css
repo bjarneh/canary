@@ -4,3 +4,14 @@ body {
 }
 a { color:#1ba1e2;text-decoration:none; }
 a:hover { color:#13709e;text-decoration:underline; }
+div.song {
+    display: inline-block;
+    padding: 10px 15px 10px 15px;
+    margin: 1px;
+    border: solid 1px #13709e;
+}
+#refresher {
+    position: fixed;
+    right: 14px;
+    bottom: 10px;
+}

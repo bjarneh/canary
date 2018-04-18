@@ -2,41 +2,54 @@
     <html>
         <head>
             <meta charset='utf-8'></meta>
-            <style type='text/css' link='css/main.css'></style>
+            <link rel="stylesheet" type="text/css" href="css/main.css" />
             <script type='text/javascript' src='js/vue.js'></script>
             <script type='text/javascript' src='js/axios.js'></script>
         </head>
 
     <body>
+        <h2> Canary </h2>
         <div id="app">
-        <h3> {{ message }} </h3>
+           <canary-song
+                v-for="item in songs"
+                v-bind:song="item"
+                v-bind:key="item.id">
+           </canary-song>
+           <button id="refresher" v-on:click="fetchAll">Refresh</button>
         </div>
     </body>
 
     <script type="text/javascript">
 
+    Vue.component(
+        'canary-song', {
+            props: ['song'],
+            template: '<div class="song"> {{ song.id }} </div>'
+        }
+    );
+
     var app = new Vue(
         {
             el: "#app",
             data: {
-                message: "Hello world"
+                songs: []
             },
             mounted: function(){
-                console.log("hello world!");
-                var that = this;
-                axios.get('api/canary')
-                    .then(function (response) {
-                        for (var i = 0; i < response.data.length; i++) {
-                            console.log(response.data[i]);
-                        }
-                    }).catch(function (error) {
-                        console.log(error);
-                    });
+                console.log("init..");
+                this.fetchAll();
             },
             methods: {
-                sorter: function(){
-                    console.log("sorting");
-                }
+                fetchAll: function(){
+                    var that = this;
+                    axios.get('api/canary')
+                        .then(function (response) {
+                            for (var i = 0; i < response.data.length; i++) {
+                                that.songs.push( response.data[i] );
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    }
             }
         }
     );
