@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebAppX.Models;
 
 /**
- * Only "controller" in this somewhat modified MVC Hello world App.
+ * Only "controller" in this somewhat modified MVC Hello World App.
  *
  * @author  bjarneholen@gmail.com
  * @license BSD
@@ -23,7 +23,10 @@ namespace WebAppX.Controllers
             { "id:1", new Sing("id:1") },
             { "id:2", new Sing("id:2") },
             { "id:3", new Sing("id:3") },
-            { "id:4", new Sing("id:4") }
+            { "id:4", new Sing("id:4") },
+            { "id:5", new Sing("id:5") },
+            { "id:6", new Sing("id:6") },
+            { "id:7", new Sing("id:7") }
         };
 
         public Dictionary<string, Sing> Songs { get => songs; set => songs = value; }
@@ -37,7 +40,16 @@ namespace WebAppX.Controllers
 
         // GET api/canary/5
         [HttpGet("{id}")]
-        public Sing Get(String id) => songs[id];
+        public Sing Get(String id)
+        {
+            if( songs.ContainsKey(id) )
+            {
+                return songs[id];
+            }
+            // Is this really the way to do it?
+            Response.StatusCode = 404;
+            return null;
+        }
 
         // POST api/canary
         [HttpPost]
