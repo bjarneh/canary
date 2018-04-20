@@ -42,7 +42,7 @@ namespace WebAppX
             // Use static files inside wwwroot
             // app.UseStaticFiles();
 
-            // There has to be a simpler way to se encoding?
+            // There has to be a simpler way to set encoding?
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>

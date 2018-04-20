@@ -2,6 +2,9 @@ body {
     font-family: "Segoe UI", "Segoe WP", "Helvetica Neue", 'RobotoRegular', sans-serif;
     font-size: 14px;
 }
+h1, h2, h3, h4, h5, h6, span, div, a {
+    font-family: "Segoe UI", "Segoe WP", "Helvetica Neue", 'RobotoRegular', sans-serif;
+}
 a { color:#1ba1e2;text-decoration:none; }
 a:hover { color:#13709e;text-decoration:underline; }
 div.song {
@@ -9,6 +12,11 @@ div.song {
     padding: 10px 15px 10px 15px;
     margin: 1px;
     border: solid 1px #13709e;
+    cursor: pointer;
+}
+div.song div {
+    display: inline-block;
+    margin: 7px;
 }
 #refresher {
     position: fixed;

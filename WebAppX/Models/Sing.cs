@@ -20,7 +20,7 @@ namespace WebAppX.Models
         }
 
         public String Id { get; set; }
-        public DateTime Last { get; set; }
-        public DateTime Next { get; set; }
+        public DateTime? Last { get; set; }
+        public DateTime? Next { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using WebAppX.Models;
 
 /**
@@ -47,7 +48,7 @@ namespace WebAppX.Controllers
                 return songs[id];
             }
             // Is this really the way to do it?
-            Response.StatusCode = 404;
+            Response.StatusCode = StatusCodes.Status404NotFound;
             return null;
         }
 

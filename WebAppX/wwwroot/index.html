@@ -1,58 +1,78 @@
-<!DOCTYPE html>
-    <html>
-        <head>
-            <meta charset='utf-8'></meta>
-            <link rel="stylesheet" type="text/css" href="css/main.css" />
-            <script type='text/javascript' src='js/vue.js'></script>
-            <script type='text/javascript' src='js/axios.js'></script>
-        </head>
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'></meta>
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <script type='text/javascript' src='js/vue.js'></script>
+    <script type='text/javascript' src='js/axios.js'></script>
+</head>
 
-    <body>
-        <h2> Canary </h2>
-        <div id="app">
-           <canary-song
-                v-for="item in songs"
-                v-bind:song="item"
-                v-bind:key="item.id">
-           </canary-song>
-           <button id="refresher" v-on:click="fetchAll">Refresh</button>
-        </div>
-    </body>
+<body>
+
+    <h2> Canary </h2>
+
+    <div id="app">
+        <canary-song v-for="item in songs"
+                     v-bind:song="item"
+                     v-bind:key="item.id">
+        </canary-song>
+        <button id="refresher" v-on:click="fetchAll">Refresh</button>
+    </div>
+
+    <template id="canary-template">
+       <div class="song"
+            v-on:click="song.isActive = !song.isActive"
+            v-bind:class="{ active : song.isActive }">
+           <span v-if="!song.isActive"> {{ song.id }} </span>
+           <div v-if="song.isActive">
+              Display some song info here..
+           </div>
+       </div>
+    </template>
 
     <script type="text/javascript">
 
-    Vue.component(
-        'canary-song', {
-            props: ['song'],
-            template: '<div class="song"> {{ song.id }} </div>'
-        }
-    );
-
-    var app = new Vue(
-        {
-            el: "#app",
-            data: {
-                songs: []
-            },
-            mounted: function(){
-                console.log("init..");
-                this.fetchAll();
-            },
-            methods: {
-                fetchAll: function(){
-                    var that = this;
-                    axios.get('api/canary')
-                        .then(function (response) {
-                            for (var i = 0; i < response.data.length; i++) {
-                                that.songs.push( response.data[i] );
-                            }
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
+        Vue.component(
+            'canary-song', {
+                props: ['song'],
+                template: '#canary-template',
+                methods: {
+                    toggleActive: function () {
+                        console.log(this);
                     }
+                }
             }
-        }
-    );
+        );
+
+        var app = new Vue(
+            {
+                el: "#app",
+                data: {
+                    songs: []
+                },
+                mounted: function(){
+                    console.log("init..");
+                    this.fetchAll();
+                },
+                methods: {
+                    fetchAll: function (a) {
+                        var that = this;
+                        axios.get('api/canary')
+                            .then(function (response) {
+                                that.songs = [];
+                                for (var i = 0; i < response.data.length; i++) {
+                                    response.data[i].isActive = false;
+                                    that.songs.push( response.data[i] );
+                                }
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        }
+                }
+            }
+        );
 
     </script>
-    </html>
+
+</body>
+</html>
