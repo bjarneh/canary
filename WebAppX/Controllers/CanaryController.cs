@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WebAppX.Models;
+using WebAppX.DB;
 
 /**
- * Only "controller" in this somewhat modified MVC Hello World App.
+ * Only "controller" in this somewhat modified MVC Hello world App.
  *
  * @author  bjarneholen@gmail.com
  * @license BSD
@@ -17,35 +18,28 @@ using WebAppX.Models;
 
 namespace WebAppX.Controllers
 {
+
     [Route("api/[controller]")]
     public class CanaryController : Controller
     {
-        Dictionary<string, Sing> songs = new Dictionary<string,Sing>(){
-            { "id:1", new Sing("id:1") },
-            { "id:2", new Sing("id:2") },
-            { "id:3", new Sing("id:3") },
-            { "id:4", new Sing("id:4") },
-            { "id:5", new Sing("id:5") },
-            { "id:6", new Sing("id:6") },
-            { "id:7", new Sing("id:7") }
-        };
 
-        public Dictionary<string, Sing> Songs { get => songs; set => songs = value; }
+        private MySqlDB db = new MySqlDB(
+                "Server=localhost;User ID=root;Password=passord;Database=canary");
 
         // GET api/canary
         [HttpGet]
         public IEnumerable<Sing> Get()
         {
-            return Songs.Values;
+            return db.AllSongs();
         }
 
         // GET api/canary/5
         [HttpGet("{id}")]
-        public Sing Get(String id)
+        public Sing Get(string id)
         {
-            if( songs.ContainsKey(id) )
-            {
-                return songs[id];
+            var song = db.OneSong(id);
+            if( song != default(Sing) ){
+                return song;
             }
             // Is this really the way to do it?
             Response.StatusCode = StatusCodes.Status404NotFound;
@@ -53,24 +47,38 @@ namespace WebAppX.Controllers
         }
 
         // POST api/canary
-        [HttpPost]
-        public void Post([FromBody]Sing song)
+        [HttpPost("{id}")]
+        public void Post(string id)
         {
-            songs[song.Id] = song;
+            var song = db.OneSong(id);
+            if( song == default(Sing) ){
+                var s = new Sing();
+                s.Id = id;
+                s.Last = DateTime.Now;
+                s.Next = DateTime.Now.AddDays(7);
+                db.Create(s);
+            }else{
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+            }
         }
 
         // PUT api/canary/5
         [HttpPut("{id}")]
-        public void Put(String id, [FromBody]Sing song)
+        public void Put(String id)
         {
-            songs[song.Id] = song;
+            var song = db.OneSong(id);
+            if( song != default(Sing) ){
+                song.Last = DateTime.Now;
+                db.Update(song);
+            }
         }
 
         // DELETE api/canary/5
         [HttpDelete("{id}")]
-        public void Delete(String id)
+        public void Delete(string id)
         {
-            songs.Remove(id);
+            db.Delete(id);
         }
+
     }
 }
