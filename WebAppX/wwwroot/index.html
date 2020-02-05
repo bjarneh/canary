@@ -25,7 +25,9 @@
             v-bind:class="{ active : song.isActive }">
            <span v-if="!song.isActive"> {{ song.id }} </span>
            <div v-if="song.isActive">
-              Display some song info here..
+             <div> {{ song.id }} </div>
+             <div> {{ song.next }} </div>
+             <div> {{ song.last }} </div>
            </div>
        </div>
     </template>

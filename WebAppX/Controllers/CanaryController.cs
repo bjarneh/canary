@@ -33,9 +33,9 @@ namespace WebAppX.Controllers
             return db.AllSongs();
         }
 
-        // GET api/canary/5
+        // GET api/canary/some.job
         [HttpGet("{id}")]
-        public Sing Get(string id)
+        public Sing Get([FromRoute] string id)
         {
             var song = db.OneSong(id);
             if( song != default(Sing) ){
@@ -46,9 +46,9 @@ namespace WebAppX.Controllers
             return null;
         }
 
-        // POST api/canary
+        // POST api/canary/some.job
         [HttpPost("{id}")]
-        public void Post(string id)
+        public void Post([FromRoute] string id)
         {
             var song = db.OneSong(id);
             if( song == default(Sing) ){
@@ -62,9 +62,9 @@ namespace WebAppX.Controllers
             }
         }
 
-        // PUT api/canary/5
+        // PUT api/canary/some.job
         [HttpPut("{id}")]
-        public void Put(String id)
+        public void Put([FromRoute] string id)
         {
             var song = db.OneSong(id);
             if( song != default(Sing) ){
@@ -73,9 +73,9 @@ namespace WebAppX.Controllers
             }
         }
 
-        // DELETE api/canary/5
+        // DELETE api/canary/some.job
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        public void Delete([FromRoute] string id)
         {
             db.Delete(id);
         }

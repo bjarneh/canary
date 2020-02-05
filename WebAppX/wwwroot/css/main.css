@@ -18,6 +18,16 @@ div.song div {
     display: inline-block;
     margin: 7px;
 }
+button{
+    color: white;
+    background: #444444;
+    border: 1px solid black;
+    padding: 3px 7px 3px 7px;
+    border-radius: 2px;
+}
+button:hover{
+    background: #303033;
+}
 #refresher {
     position: fixed;
     right: 14px;
