@@ -63,13 +63,30 @@ namespace WebAppX.Controllers
         }
 
         // PUT api/canary/some.job
-        [HttpPut("{id}")]
-        public void Put([FromRoute] string id)
+        [HttpPut("{hms}/{num}/{id}")]
+        public void Put(
+            [FromRoute] string hms,
+            [FromRoute] long num,
+            [FromRoute] string id)
         {
-            var song = db.OneSong(id);
-            if( song != default(Sing) ){
-                song.Last = DateTime.Now;
-                db.Update(song);
+            if(hms != "h" &&
+               hms != "m" &&
+               hms != "s")
+            {
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+            }else{
+                var song = db.OneSong(id);
+                if( song != default(Sing) ){
+                    song.Last = DateTime.Now;
+                    if(hms == "h"){
+                        song.Next = DateTime.Now.AddHours(num);
+                    }else if(hms == "m"){
+                        song.Next = DateTime.Now.AddMinutes(num);
+                    }else if(hms == "s"){
+                        song.Next = DateTime.Now.AddSeconds(num);
+                    }
+                    db.Update(song);
+                }
             }
         }
 
