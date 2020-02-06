@@ -17,6 +17,7 @@
                      v-bind:key="item.id">
         </canary-song>
         <button id="refresher" v-on:click="fetchAll">Refresh</button>
+        <button id="toggleexpand" v-on:click="toggleAll">Toggle</button>
     </div>
 
     <template id="canary-template">
@@ -69,7 +70,18 @@
                             }).catch(function (error) {
                                 console.log(error);
                             });
+                        },
+                    toggleAll: function (a) {
+                        var that = this;
+                        var collapse = false;
+                        for (var i = 0; i < that.songs.length; i++) {
+                            if(that.songs[i].isActive){
+                                collapse = true;
+                                break;
+                            }
                         }
+                        that.songs.forEach(function(e){ e.isActive = !collapse; });
+                    }
                 }
             }
         );

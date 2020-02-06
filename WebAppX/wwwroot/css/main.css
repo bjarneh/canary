@@ -22,7 +22,7 @@ button{
     color: white;
     background: #444444;
     border: 1px solid black;
-    padding: 3px 7px 3px 7px;
+    padding: 4px 7px 4px 7px;
     border-radius: 2px;
 }
 button:hover{
@@ -31,5 +31,10 @@ button:hover{
 #refresher {
     position: fixed;
     right: 14px;
+    bottom: 10px;
+}
+#toggleexpand {
+    position: fixed;
+    left: 14px;
     bottom: 10px;
 }
