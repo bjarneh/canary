@@ -23,13 +23,16 @@
     <template id="canary-template">
        <div class="song"
             v-on:click="song.isActive = !song.isActive"
-            v-bind:class="{ active : song.isActive }">
+            v-bind:class="{ active : song.isActive, late: song.isLate }">
            <span v-if="!song.isActive"> {{ song.id }} </span>
            <div v-if="song.isActive">
-             <div> {{ song.id }} </div>
-             <div> {{ song.next }} </div>
-             <div> {{ song.last }} </div>
-           </div>
+               <table>
+                   <tr><th>id</th><td> {{ song.id }} </td></tr>
+                   <tr><th>next</th><td> {{ song.next }} </td> </tr>
+                   <tr><th>last</th><td> {{ song.last }} </td></tr>
+                   <tr><th>host</th><td> {{ song.ipAddr }} </td></tr>
+               </table>
+            </div>
        </div>
     </template>
 
@@ -46,6 +49,53 @@
                 }
             }
         );
+
+
+        function reloadSong(song){
+
+            var delta = song.nextDate.getTime() - Date.now();
+            
+            window.setTimeout(function(obj){
+                axios.get('api/canary/'+obj.id)
+                    .then(function (response) {
+                        
+                        obj.next = response.data.next;
+                        obj.last = response.data.last;
+                        obj.ipAddr = response.data.ipAddr;
+
+                        obj.isLate = obj.calcLate();
+
+                        if(!obj.isLate){
+                            reloadSong(obj);
+                        }
+
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+            }, delta, song);
+        }
+
+
+        function calcLate(){
+            //this.nextDate = new Date(this.next + ":00Z");
+            this.nextDate = new Date(this.next);
+            return this.nextDate.getTime() < Date.now();
+        }
+
+
+        function extendDbObj(fromDb){
+
+            fromDb.isActive = false;
+            fromDb.calcLate = calcLate;
+            fromDb.isLate = fromDb.calcLate();
+            
+            if(!fromDb.isLate){
+                reloadSong(fromDb);
+            }
+            
+            return fromDb;
+        };
+
 
         var app = new Vue(
             {
@@ -64,8 +114,7 @@
                             .then(function (response) {
                                 that.songs = [];
                                 for (var i = 0; i < response.data.length; i++) {
-                                    response.data[i].isActive = false;
-                                    that.songs.push( response.data[i] );
+                                    that.songs.push( extendDbObj(response.data[i]) );
                                 }
                             }).catch(function (error) {
                                 console.log(error);

@@ -1,6 +1,6 @@
 # canary
-Report recurring events
 
+Report recurring events
 
 * dotnet add package MySqlConnector
 * dotnet add package Dapper

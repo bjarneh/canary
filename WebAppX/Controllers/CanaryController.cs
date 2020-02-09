@@ -53,22 +53,26 @@ namespace WebAppX.Controllers
             var song = db.OneSong(id);
             if( song == default(Sing) ){
                 var s = new Sing();
+                DateTime now = DateTime.Now;
                 s.Id = id;
-                s.Last = DateTime.Now;
-                s.Next = DateTime.Now.AddDays(7);
+                s.Last = now;
+                s.Next = now; // Expired
+                s.IpAddr = Request.Host.ToUriComponent();
                 db.Create(s);
             }else{
                 Response.StatusCode = StatusCodes.Status400BadRequest;
             }
         }
 
-        // PUT api/canary/some.job
-        [HttpPut("{hms}/{num}/{id}")]
+        // PUT api/canary/some.job/30/m
+        [HttpPut("{id}/{num}/{hms}")]
         public void Put(
-            [FromRoute] string hms,
+            [FromRoute] string id,
             [FromRoute] long num,
-            [FromRoute] string id)
+            [FromRoute] string hms)
         {
+            //Console.WriteLine($"{Request.Host.Host}");
+
             if(hms != "h" &&
                hms != "m" &&
                hms != "s")
@@ -85,6 +89,7 @@ namespace WebAppX.Controllers
                     }else if(hms == "s"){
                         song.Next = DateTime.Now.AddSeconds(num);
                     }
+                    song.IpAddr = Request.Host.Host;
                     db.Update(song);
                 }
             }

@@ -13,10 +13,14 @@ div.song {
     margin: 1px;
     border: solid 1px #13709e;
     cursor: pointer;
+    background-color: green;
+    color: white;
 }
-div.song div {
-    display: inline-block;
-    margin: 7px;
+div.late {
+    background-color: red !important;
+}
+div.song table th {
+    text-align: right;
 }
 button{
     color: white;

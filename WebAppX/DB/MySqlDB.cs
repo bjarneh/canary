@@ -46,14 +46,14 @@ namespace WebAppX.DB
         public int Create(Sing sing){
             using ( IDbConnection conn = new MySqlConnection(this.ConnString) )
             {
-                return conn.Execute("INSERT INTO sing(id,last,next) VALUES(@id, @last, @next) ", sing);
+                return conn.Execute("INSERT INTO sing(id,last,next,ipaddr) VALUES(@id, @last, @next, @ipaddr) ", sing);
             }
         }
 
         public int Update(Sing sing){
             using ( IDbConnection conn = new MySqlConnection(this.ConnString) )
             {
-                return conn.Execute("UPDATE sing SET last = @last, next = @next WHERE id = @id", sing);
+                return conn.Execute("UPDATE sing SET last = @last, next = @next, ipaddr = @ipaddr WHERE id = @id", sing);
             }
         }
 

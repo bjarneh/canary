@@ -19,8 +19,9 @@ namespace WebAppX.Models
             this.Id = _id;
         }
 
-        public String Id { get; set; }
+        public string Id { get; set; }
         public DateTime? Last { get; set; }
         public DateTime? Next { get; set; }
+        public string IpAddr { get; set; }
     }
 }
