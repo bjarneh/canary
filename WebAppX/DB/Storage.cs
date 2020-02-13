@@ -16,7 +16,7 @@ using WebAppX.Models;
 
 namespace WebAppX.DB
 {
-    public interface Database{
+    public interface Storage {
         
         IEnumerable<Sing> AllSongs();
 

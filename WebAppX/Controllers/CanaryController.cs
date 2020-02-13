@@ -23,9 +23,9 @@ namespace WebAppX.Controllers
     public class CanaryController : Controller
     {
 
-        private readonly Database db;
+        private readonly Storage db;
 
-        public CanaryController(Database dbDep){
+        public CanaryController(Storage dbDep){
             db = dbDep;
         }
 
