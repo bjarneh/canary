@@ -37,6 +37,7 @@ namespace WebAppX.Controllers
             return db.AllSongs();
         }
 
+
         // GET api/canary/some.job
         [HttpGet("{id}")]
         public Sing Get([FromRoute] string id)
@@ -50,23 +51,37 @@ namespace WebAppX.Controllers
             return null;
         }
 
-        // POST api/canary/some.job
-        [HttpPost("{id}")]
-        public void Post([FromRoute] string id)
+
+        // POST api/canary/some.job/30/m
+        [HttpPost("{id}/{num}/{hms}")]
+        public void Post(
+            [FromRoute] string id,
+            [FromRoute] long num,
+            [FromRoute] string hms)
         {
-            var song = db.OneSong(id);
-            if( song == default(Sing) ){
-                var s = new Sing();
-                DateTime now = DateTime.Now;
-                s.Id = id;
-                s.Last = now;
-                s.Next = now; // Expired
-                s.IpAddr = Request.Host.ToUriComponent();
-                db.Create(s);
-            }else{
+            if(hms != "h" &&
+               hms != "m" &&
+               hms != "s")
+            {
                 Response.StatusCode = StatusCodes.Status400BadRequest;
+            }else{
+                var song = new Sing();
+                song.Id = id;
+                song.Last = DateTime.Now;
+                if(hms == "h"){
+                    song.Next = DateTime.Now.AddHours(num);
+                }else if(hms == "m"){
+                    song.Next = DateTime.Now.AddMinutes(num);
+                }else if(hms == "s"){
+                    song.Next = DateTime.Now.AddSeconds(num);
+                }else{
+                    song.Next = song.Last;
+                }
+                song.IpAddr = Request.Host.Host;
+                db.CreateOrUpdate(song);
             }
         }
+
 
         // PUT api/canary/some.job/30/m
         [HttpPut("{id}/{num}/{hms}")]
@@ -75,29 +90,9 @@ namespace WebAppX.Controllers
             [FromRoute] long num,
             [FromRoute] string hms)
         {
-            //Console.WriteLine($"{Request.Host.Host}");
-
-            if(hms != "h" &&
-               hms != "m" &&
-               hms != "s")
-            {
-                Response.StatusCode = StatusCodes.Status400BadRequest;
-            }else{
-                var song = db.OneSong(id);
-                if( song != default(Sing) ){
-                    song.Last = DateTime.Now;
-                    if(hms == "h"){
-                        song.Next = DateTime.Now.AddHours(num);
-                    }else if(hms == "m"){
-                        song.Next = DateTime.Now.AddMinutes(num);
-                    }else if(hms == "s"){
-                        song.Next = DateTime.Now.AddSeconds(num);
-                    }
-                    song.IpAddr = Request.Host.Host;
-                    db.Update(song);
-                }
-            }
+            Post(id, num, hms);
         }
+
 
         // DELETE api/canary/some.job
         [HttpDelete("{id}")]

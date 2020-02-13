@@ -39,6 +39,11 @@ namespace WebAppX.DB
             return 0;
         }
 
+        public int CreateOrUpdate(Sing sing){
+            songs[sing.Id] = sing;
+            return 0;
+        }
+
         public int Update(Sing sing){
             songs[sing.Id] = sing;
             return 0;

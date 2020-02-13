@@ -24,6 +24,8 @@ namespace WebAppX.DB
 
         int Create(Sing sing);
 
+        int CreateOrUpdate(Sing sing);
+
         int Update(Sing sing);
 
         int Delete(string id);
