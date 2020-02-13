@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
+using WebAppX.DB;
 
 namespace WebAppX
 {
@@ -27,6 +28,8 @@ namespace WebAppX
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            //services.AddSingleton<Database, MySqlDB>();
+            services.AddSingleton<Storage, InMemory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

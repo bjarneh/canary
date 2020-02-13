@@ -9,7 +9,7 @@ using System.Data;
 
 
 /**
- * Just an object to store feedback.
+ * Just an object to store feedback in MySQL.
  * 
  * @author  bjarneholen@gmail.com
  * @license BSD
@@ -18,16 +18,15 @@ using System.Data;
 
 namespace WebAppX.DB
 {
-    public class MySqlDB{
+    public class MySqlDB : Storage {
         
-        public string ConnString { get; set; }
+        public string ConnString { get; set; } = "Server=localhost;User ID=root;Password=passord;Database=canary";
 
         public MySqlDB(string _connStr){
             ConnString = _connStr;
         }
         
-        public MySqlDB(){
-        }
+        public MySqlDB(){ }
 
         public IEnumerable<Sing> AllSongs(){
             using ( IDbConnection conn = new MySqlConnection(this.ConnString) )

@@ -23,8 +23,12 @@ namespace WebAppX.Controllers
     public class CanaryController : Controller
     {
 
-        private MySqlDB db = new MySqlDB(
-                "Server=localhost;User ID=root;Password=passord;Database=canary");
+        private readonly Database db;
+
+        public CanaryController(Database dbDep){
+            db = dbDep;
+        }
+
 
         // GET api/canary
         [HttpGet]
