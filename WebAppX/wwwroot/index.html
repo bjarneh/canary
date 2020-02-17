@@ -55,7 +55,7 @@
 
             var delta = song.nextDate.getTime() - Date.now();
             
-            window.setTimeout(function(obj){
+            song.delayId = window.setTimeout(function(obj){
                 axios.get('api/canary/'+obj.id)
                     .then(function (response) {
                         
@@ -107,9 +107,13 @@
                     console.log("init..");
                     this.fetchAll();
                 },
+                beforeDestroy: function(a){
+                    this.removeTimeoutAll(a);
+                },
                 methods: {
                     fetchAll: function (a) {
                         var that = this;
+                        that.removeTimeoutAll(a);
                         axios.get('api/canary')
                             .then(function (response) {
                                 that.songs = [];
@@ -130,6 +134,14 @@
                             }
                         }
                         that.songs.forEach(function(e){ e.isActive = !collapse; });
+                    },
+                    removeTimeoutAll: function(a){
+                        var that = this;
+                        for (var i = 0; i < that.songs.length; i++) {
+                            if(that.delayId){
+                                window.clearTimeout(that.delayId);
+                            }
+                        }
                     }
                 }
             }
