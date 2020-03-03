@@ -1,5 +1,5 @@
-
 // Copyright (C) Bjarne Holen 2020. BSD compatible license.
+
 using System;
 using System.Collections.Generic;
 using System.Data;

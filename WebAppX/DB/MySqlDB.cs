@@ -1,5 +1,5 @@
-
 // Copyright (C) Bjarne Holen 2018. BSD compatible license.
+
 using System;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;

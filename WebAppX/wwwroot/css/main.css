@@ -20,7 +20,11 @@ div.late {
     background-color: red !important;
 }
 div.song table th {
+    font-family: monospace;
     text-align: right;
+}
+div.song table td {
+    color: black;
 }
 button{
     color: white;

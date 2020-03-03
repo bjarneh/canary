@@ -27,9 +27,9 @@
            <span v-if="!song.isActive"> {{ song.id }} </span>
            <div v-if="song.isActive">
                <table>
-                   <tr><th>id</th><td> {{ song.id }} </td></tr>
-                   <tr><th>next</th><td> {{ song.next }} </td> </tr>
-                   <tr><th>last</th><td> {{ song.last }} </td></tr>
+                   <tr><th>·id·</th><td> {{ song.id }} </td></tr>
+                   <tr><th>next</th><td> {{ song.next | formatDate }} </td> </tr>
+                   <tr><th>last</th><td> {{ song.last | formatDate }} </td></tr>
                    <tr><th>host</th><td> {{ song.ipAddr }} </td></tr>
                </table>
             </div>
@@ -49,6 +49,14 @@
                 }
             }
         );
+
+        /* Very basic date formatting */
+        Vue.filter('formatDate', function(value) {
+            if (value) {
+                return (new String(value)).replace("T"," ");
+            }
+        });
+
 
 
         function reloadSong(song){
